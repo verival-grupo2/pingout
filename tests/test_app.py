@@ -14,7 +14,6 @@ def test_unique_generated_uuid(client):
     response = client.post('/create-pingout')  
     uuid_2 = response.json['uuid']
     assert response.status_code == 201
-
     assert uuid_1 != uuid_2
 
 

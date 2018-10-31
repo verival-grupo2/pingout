@@ -1,3 +1,7 @@
+[![Coverage Status](https://coveralls.io/repos/github/verival-grupo2/pingout/badge.svg)](https://coveralls.io/github/verival-grupo2/pingout)
+[![Build Status](https://travis-ci.com/verival-grupo2/pingout.svg?branch=master)](https://travis-ci.com/verival-grupo2/pingout)
+[![Maintainability](https://api.codeclimate.com/v1/badges/dcb12a060ff01332c097/maintainability)](https://codeclimate.com/github/verival-grupo2/pingout/maintainability)
+
 <p align="center"><img src="https://user-images.githubusercontent.com/14370340/42978617-5260c1b2-8ba4-11e8-932b-89fe566cd730.png" width="350px"></p>
 
 # Pingout 
