@@ -1,3 +1,4 @@
+from dateutil import parser
 
 def test_return_200_on_root(client):
     """ Return status code 200 on root url"""
@@ -31,8 +32,16 @@ def test_ping_to_invalid_pingout_uuid(client):
     assert response.status_code == 404
 
 
-def test_filtered_pings(client):
+def test_filtered_pings_with_valid_date(client):
     response = client.post('/create-pingout')
     uuid = response.json['uuid']
+    client.post(f'/{uuid}/ping')
+    response_data = client.get(f'/{uuid}').json
+    date_string = response_data['pingout']['pings'][0]['date']
+    date = parser.parse(date_string)
 
-    response = client.get(f'/{uuid}/filter/?initial_date=&final')
+    initial_date = '-'.join([str(date.year), str(date.month), str(date.day)])
+    final_date = '-'.join([str(date.year), str(date.month), str(date.day)])
+
+    response = client.get(f'/{uuid}/filter/?initial_date={initial_date}&final_date={final_date}').json
+    assert response_data['pingout']['pings'][0]['count'] == 1
