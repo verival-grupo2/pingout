@@ -44,3 +44,14 @@ def test_filtered_pings_with_valid_date(client):
 
     response = client.get(f'/{uuid}/filter/?initial_date={initial_date}&final_date={final_date}').json
     assert response_data['pingout']['pings'][0]['count'] == 1
+
+
+def test_filtered_pings_with_final_date_before_initial_date(client):
+    response = client.post('/create-pingout')
+    uuid = response.json['uuid']
+
+    initial_date = parser.parse('2018-10-30')
+    final_date = parser.parse('2018-10-29')
+
+    response_data = client.get(f'/uuid/filter/?initial_date={initial_date}&final_date={final_date}').json
+    assert response_data == None    
