@@ -14,7 +14,7 @@ before_install:
 
 script:
   - docker-compose up -d
-  - docker-compose exec web pytest --cov=.
+  - docker-compose exec web pytest tests --cov=.
 
 after_success:
     - docker-compose exec web coveralls
