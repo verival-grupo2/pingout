@@ -31,6 +31,12 @@ def test_ping_to_invalid_pingout_uuid(client):
     assert response.status_code == 404
 
 
+def test_ping_to_bad_format(client):
+    invalid_uuid = 'invalid'
+    response = client.get(f'/{invalid_uuid}')
+    assert response.status_code == 400
+
+
 def test_filtered_pings_with_valid_date(client):
     response = client.post('/create-pingout')
     uuid = response.json['uuid']
