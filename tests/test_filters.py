@@ -5,7 +5,8 @@ from uuid import uuid4
 from pingout.filters import (
     filter_pings_range_of_dates,
     filter_occurrences_ping_range_date,
-    filter_pingout_all_pings
+    filter_pingout_all_pings,
+    filter_pings_of_date
 )
 
 
@@ -66,3 +67,12 @@ def test_filter_pingout_all_pings(db_collection):
     db_collection.insert_one({'uuid': uuid.hex, 'pings': [{'count': 1, "date": '10/12/2019'}]})
     pings = filter_pingout_all_pings(uuid.hex, db_collection)
     assert pings == [{'count': 1, "date": '10/12/2019'}] 
+
+def test_filter_pings_of_date(db_collection):
+    uuid = uuid4()
+    date = datetime.datetime.today().replace(second=0,
+                                             microsecond=0)
+    db_collection.insert_one({'uuid': uuid.hex, 'pings': [{'count': 1, "date": date}]})
+    pings_data=filter_pings_of_date(uuid.hex, db_collection, date)
+    print(pings_data)
+    assert pings_data == [{'count': 1, "date": date}]
