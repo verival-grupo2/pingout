@@ -74,5 +74,8 @@ def test_filter_pings_of_date(db_collection):
                                              microsecond=0)
     db_collection.insert_one({'uuid': uuid.hex, 'pings': [{'count': 1, "date": date}]})
     pings_data=filter_pings_of_date(uuid.hex, db_collection, date)
+<<<<<<< HEAD
     print(pings_data)
+=======
+>>>>>>> 6f0eb1f495a88bae9f37bc3ce3ff3791e8769f32
     assert pings_data == [{'count': 1, "date": date}]
