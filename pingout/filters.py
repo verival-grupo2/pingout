@@ -8,7 +8,6 @@ def filter_pingout_all_pings(uuid, collection):
     return pings
 
 
-# TODO: Refact this to filter on mongo
 def filter_pings_of_date(uuid, collection, date):
     """ Filter all pings of a given date, which must be an
     instance of datetime """
