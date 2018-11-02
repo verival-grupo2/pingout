@@ -4,7 +4,8 @@ from dateutil import parser
 from uuid import uuid4
 from pingout.filters import (
     filter_pings_range_of_dates,
-    filter_occurrences_ping_range_date
+    filter_occurrences_ping_range_date,
+    filter_pingout_all_pings
 )
 
 
@@ -59,3 +60,9 @@ def test_filter_occurrences_ping_range_date(db_collection):
     test = filter_occurrences_ping_range_date(uuid.hex, db_collection, initial, final)
 
     assert type(test) == dict
+
+def test_filter_pingout_all_pings(db_collection):
+    uuid = uuid4()
+    db_collection.insert_one({'uuid': uuid.hex, 'pings': [{'count': 1, "date": '10/12/2019'}]})
+    pings = filter_pingout_all_pings(uuid.hex, db_collection)
+    assert pings == [{'count': 1, "date": '10/12/2019'}] 
