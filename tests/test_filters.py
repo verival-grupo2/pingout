@@ -22,6 +22,7 @@ def test_filter_pings_range_of_dates(db_collection):
     test = filter_pings_range_of_dates(uuid.hex, db_collection, initial, final)
     assert test == [{'count': 1, "date": date.date()}]
 
+
 def test_filter_pings_range_of_dates_error(db_collection):
     uuid = uuid4()
     date = datetime.datetime.today().replace(second=0,
@@ -34,6 +35,7 @@ def test_filter_pings_range_of_dates_error(db_collection):
     with pytest.raises(ValueError) as excinfo:
         filter_pings_range_of_dates(uuid.hex, db_collection, initial, final)
     assert 'Invalid date type' in str(excinfo.value)
+
 
 def test_filter_occurrences_ping_range_date_error_date_type(db_collection):
     uuid = uuid4()
@@ -49,6 +51,7 @@ def test_filter_occurrences_ping_range_date_error_date_type(db_collection):
         filter_occurrences_ping_range_date(uuid.hex, db_collection, initial, final)
     assert 'Invalid date type' in str(excinfo.value)
 
+
 def test_filter_occurrences_ping_range_date(db_collection):
     uuid = uuid4()
     date = datetime.datetime.today().replace(second=0,
@@ -62,11 +65,13 @@ def test_filter_occurrences_ping_range_date(db_collection):
 
     assert type(test) == dict
 
+
 def test_filter_pingout_all_pings(db_collection):
     uuid = uuid4()
     db_collection.insert_one({'uuid': uuid.hex, 'pings': [{'count': 1, "date": '10/12/2019'}]})
     pings = filter_pingout_all_pings(uuid.hex, db_collection)
     assert pings == [{'count': 1, "date": '10/12/2019'}] 
+
 
 def test_filter_pings_of_date(db_collection):
     uuid = uuid4()
@@ -77,3 +82,13 @@ def test_filter_pings_of_date(db_collection):
 
     print(pings_data)
     assert pings_data == [{'count': 1, "date": date}]
+
+
+def test_filter_pings_of_date_error(db_collection):
+    uuid = uuid4()
+    date = "Fri, 02 Nov 2018 00:49:00 GMT"
+    db_collection.insert_one({'uuid': uuid.hex, 'pings': [{'count': 1, "date": date}]})
+    
+    with pytest.raises(ValueError) as excinfo:
+        test = filter_pings_of_date(uuid.hex, db_collection, date)
+    assert 'Invalid date type' in str(excinfo.value)
