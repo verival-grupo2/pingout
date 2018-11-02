@@ -2,7 +2,10 @@ import pytest
 import datetime
 from dateutil import parser
 from uuid import uuid4
-from pingout.filters import filter_pings_range_of_dates
+from pingout.filters import (
+    filter_pings_range_of_dates,
+    filter_occurrences_ping_range_date
+)
 
 
 def test_filter_pings_range_of_dates(db_collection):
@@ -29,3 +32,30 @@ def test_filter_pings_range_of_dates_error(db_collection):
     with pytest.raises(ValueError) as excinfo:
         filter_pings_range_of_dates(uuid.hex, db_collection, initial, final)
     assert 'Invalid date type' in str(excinfo.value)
+
+def test_filter_occurrences_ping_range_date_error_date_type(db_collection):
+    uuid = uuid4()
+    date = datetime.datetime.today().replace(second=0,
+                                             microsecond=0)
+    db_collection.insert_one({'uuid': uuid.hex, 'pings': [{'count': 1, "date": date}]})
+
+    initial = '-'.join([str(date.year), str(date.month), str(date.day)])
+    final = '-'.join([str(date.year), str(date.month), str(date.day)])
+
+
+    with pytest.raises(ValueError) as excinfo:
+        filter_occurrences_ping_range_date(uuid.hex, db_collection, initial, final)
+    assert 'Invalid date type' in str(excinfo.value)
+
+def test_filter_occurrences_ping_range_date(db_collection):
+    uuid = uuid4()
+    date = datetime.datetime.today().replace(second=0,
+                                             microsecond=0)
+    db_collection.insert_one({'uuid': uuid.hex, 'pings': [{'count': 1, "date": date}]})
+
+    initial = datetime.datetime.today()
+    final = datetime.datetime.today()
+
+    test = filter_occurrences_ping_range_date(uuid.hex, db_collection, initial, final)
+
+    assert type(test) == dict
